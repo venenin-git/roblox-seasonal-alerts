@@ -6,5 +6,10 @@
   },
   "_meta": {
     "consecutive_errors": 0
+  },
+  "bundle:201": {
+    "is_for_sale": true,
+    "price": 31000,
+    "name": "Headless Horseman"
   }
 }

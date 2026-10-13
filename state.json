@@ -1,15 +1,10 @@
 {
-  "bundle:23": {
-    "is_for_sale": false,
-    "price": 0,
-    "name": "Headless Horseman"
-  },
-  "_meta": {
-    "consecutive_errors": 0
-  },
   "bundle:201": {
     "is_for_sale": true,
     "price": 31000,
     "name": "Headless Horseman"
+  },
+  "_meta": {
+    "consecutive_errors": 0
   }
 }

@@ -17,6 +17,10 @@ on:
         description: "Mostrar a resposta bruta da API nos logs"
         type: boolean
         default: false
+      preview:
+        description: "Enviar um alerta de demonstração de cada item (não altera o estado)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -50,6 +54,8 @@ jobs:
           TEST_WEBHOOK: ${{ inputs.test_webhook }}
           DRY_RUN: ${{ inputs.dry_run }}
           DEBUG: ${{ inputs.debug }}
+          PREVIEW: ${{ inputs.preview }}
+          DISCORD_MENTION: ${{ vars.DISCORD_MENTION }}
         run: python bot.py
 
       - name: Salvar estado para evitar alertas repetidos
@@ -61,4 +67,3 @@ jobs:
             git commit -m "Atualizar estado de monitoramento"
             git push
           fi
-

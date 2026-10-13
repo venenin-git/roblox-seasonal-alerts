@@ -1,1 +1,64 @@
+name: Monitorar itens sazonais do Roblox
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      test_webhook:
+        description: "Só enviar uma mensagem de teste ao Discord"
+        type: boolean
+        default: false
+      dry_run:
+        description: "Consultar o Roblox sem enviar alertas nem salvar estado"
+        type: boolean
+        default: false
+      debug:
+        description: "Mostrar a resposta bruta da API nos logs"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: seasonal-item-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Consultar catálogo e enviar alertas
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TEST_WEBHOOK: ${{ inputs.test_webhook }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          DEBUG: ${{ inputs.debug }}
+        run: python bot.py
+
+      - name: Salvar estado para evitar alertas repetidos
+        run: |
+          if [[ -n "$(git status --porcelain state.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add state.json
+            git commit -m "Atualizar estado de monitoramento"
+            git push
+          fi
 

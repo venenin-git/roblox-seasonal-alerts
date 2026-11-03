@@ -1,6 +1,6 @@
 {
   "bundle:201": {
-    "is_for_sale": true,
+    "is_for_sale": false,
     "price": 31000,
     "name": "Headless Horseman"
   },
